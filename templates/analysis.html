@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPsych AI - Pet Behavior Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark Blue Palette */
+            --navy-900: #0a0f1c;
+            --navy-800: #1a2332;
+            --navy-700: #2d3a52;
+            --navy-600: #3c4a63;
+            --navy-500: #4b5a73;
+            --navy-400: #5a6a84;
+            --navy-300: #6b7a94;
+            --navy-200: #8a97ac;
+            --navy-100: #a9b4c4;
+            --navy-50: #d4d9e0;
+
+            /* Orange Palette */
+            --orange-500: #ff6b35;
+            --orange-400: #ff7f50;
+            --orange-300: #ff9470;
+            --orange-600: #e55a2b;
+            --orange-700: #cc4e21;
+            --orange-800: #b3421d;
+
+            /* Neutral Colors */
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 50%, var(--navy-600) 100%);
+            --gradient-orange: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+            --gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+
+            /* Shadows */
+            --shadow-soft: 0 8px 32px rgba(10, 15, 28, 0.08);
+            --shadow-medium: 0 12px 48px rgba(10, 15, 28, 0.12);
+            --shadow-strong: 0 20px 64px rgba(10, 15, 28, 0.16);
+            --shadow-orange: 0 8px 32px rgba(255, 107, 53, 0.2);
+
+            /* Transitions */
+            --transition-fast: 0.15s ease-out;
+            --transition-base: 0.3s ease-out;
+            --transition-slow: 0.5s ease-out;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--navy-800);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--gradient-primary) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+
+        .navbar:hover {
+            box-shadow: var(--shadow-strong);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .navbar-brand:hover {
+            transform: translateY(-2px) scale(1.02);
+            color: var(--orange-300) !important;
+        }
+
+        /* Enhanced Brain Logo */
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-orange);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-orange);
+        }
+
+        .brand-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .brand-logo:hover::before {
+            animation: shimmer 0.8s ease-out;
+        }
+
+        .brand-logo:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 12px 30px rgba(255, 107, 53, 0.5);
+            background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-500) 100%);
+        }
+
+        .brand-logo i {
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo:hover i {
+            transform: scale(1.1);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) rotate(45deg); opacity: 0; }
+        }
+
+        /* Enhanced Brand Text */
+        .brand-text {
+            background: linear-gradient(135deg, var(--white) 0%, var(--orange-300) 50%, var(--white) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: gradient-shift 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .brand-text {
+            animation-duration: 0.8s;
+            filter: drop-shadow(0 0 6px rgba(255, 107, 53, 0.3));
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .nav-back {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-back::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .nav-back:hover::before {
+            width: 200%;
+            height: 200%;
+        }
+
+        .nav-back:hover {
+            color: var(--orange-300);
+            transform: translateX(-3px);
+        }
+
+        /* Header Section */
+        .analysis-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analysis-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .analysis-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Enhanced Header Icon */
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-orange);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            box-shadow: var(--shadow-orange);
+            animation: float-pulse 3s ease-in-out infinite;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .header-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            border: 2px solid var(--orange-500);
+            animation: ripple-square 2.5s infinite;
+            opacity: 0.6;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.5);
+            background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-600) 100%);
+        }
+
+        .header-icon:hover::after {
+            animation-duration: 1s;
+            border-color: var(--orange-300);
+        }
+
+        @keyframes float-pulse {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.02); }
+        }
+
+        @keyframes ripple-square {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Header Title */
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--white) 0%, var(--orange-300) 50%, var(--white) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: title-shimmer 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .header-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-orange);
+            border-radius: 2px;
+            animation: underline-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes title-shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes underline-pulse {
+            0%, 100% { width: 60px; opacity: 1; }
+            50% { width: 80px; opacity: 0.8; }
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .header-subtitle:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: -2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-card {
+            background: var(--gradient-card);
+            border-radius: 24px;
+            box-shadow: var(--shadow-strong);
+            border: 1px solid var(--gray-200);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-orange);
+        }
+
+        .main-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        /* Enhanced Tabs */
+        .nav-tabs {
+            border: none;
+            margin-bottom: 2rem;
+            background: var(--gray-100);
+            border-radius: 16px;
+            padding: 0.5rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin: 0 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tabs .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .nav-tabs .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border: none;
+            color: var(--orange-500);
+            background: rgba(255, 107, 53, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .nav-tabs .nav-link.active {
+            background: var(--gradient-orange);
+            color: var(--white);
+            border: none;
+            box-shadow: var(--shadow-orange);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .nav-tabs .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--orange-500);
+            border-radius: 50%;
+            animation: dot-pulse 2s infinite;
+        }
+
+        @keyframes dot-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+            50% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+        }
+
+        /* Enhanced Forms */
+        .form-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-orange);
+            transition: all 0.5s ease;
+        }
+
+        .form-container:hover::before {
+            left: 100%;
+        }
+
+        .form-container:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .form-header h4 {
+            color: var(--navy-800);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .form-header h4 i {
+            color: var(--orange-500);
+            transition: all 0.3s ease;
+        }
+
+        .form-header:hover h4 i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--navy-700);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-label i {
+            transition: all 0.3s ease;
+        }
+
+        .form-label:hover i {
+            transform: scale(1.1);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: var(--white);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .form-control:hover, .form-select:hover {
+            border-color: var(--orange-300);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--orange-500);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1), var(--shadow-medium);
+            outline: none;
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray-400);
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus::placeholder {
+            opacity: 0.7;
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--gradient-orange);
+            color: var(--white);
+            box-shadow: var(--shadow-orange);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-orange);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+            color: var(--white);
+        }
+
+        .btn-primary i {
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--navy-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: var(--orange-500);
+            border: 2px solid var(--orange-500);
+            position: relative;
+        }
+
+        .btn-outline-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--orange-500);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .btn-outline-primary:hover::before {
+            width: 300%;
+            height: 300%;
+        }
+
+        .btn-outline-primary:hover {
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-orange);
+            border-color: var(--orange-400);
+        }
+
+        .btn-lg {
+            padding: 1.125rem 2.5rem;
+            font-size: 1.125rem;
+            border-radius: 16px;
+        }
+
+        /* Enhanced Video Container */
+        .video-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--gray-100);
+            box-shadow: var(--shadow-medium);
+            margin: 2rem 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .video-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        #videoElement {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        #cameraPlaceholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-50) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            color: var(--gray-500);
+            border: 2px dashed var(--gray-300);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #cameraPlaceholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.05), transparent);
+            transition: all 0.8s ease;
+        }
+
+        #cameraPlaceholder:hover::before {
+            left: 100%;
+        }
+
+        #cameraPlaceholder:hover {
+            border-color: var(--orange-500);
+            color: var(--orange-600);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            transform: scale(1.01);
+        }
+
+        /* Enhanced Camera Icon */
+        .camera-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            box-shadow: var(--shadow-orange);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .camera-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--orange-500);
+            animation: camera-pulse 2s infinite;
+            opacity: 0.5;
+        }
+
+        .camera-icon:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5);
+            background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-600) 100%);
+        }
+
+        .camera-icon:hover::after {
+            animation-duration: 1s;
+            border-color: var(--orange-300);
+        }
+
+        @keyframes camera-pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Feature Icons */
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-orange);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-orange);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .feature-icon:hover::before {
+            left: 100%;
+        }
+
+        .feature-icon:hover {
+            transform: scale(1.15) rotate(-8deg);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5);
+            background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-600) 100%);
+        }
+
+        .feature-icon i {
+            transition: all 0.3s ease;
+        }
+
+        .feature-icon:hover i {
+            transform: scale(1.1);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Enhanced Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-medium);
+            margin: 2rem 0;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-orange);
+            animation: loader-bar 2s ease-in-out infinite;
+        }
+
+        @keyframes loader-bar {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--orange-500);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--orange-300);
+            border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-orange);
+            border-radius: 2px;
+            animation: progress 3s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Enhanced Analysis Results */
+        .analysis-result {
+            display: none;
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-strong);
+            margin-top: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-orange);
+        }
+
+        .analysis-result:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .analysis-header-section {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .analysis-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-orange);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-orange);
+            animation: analysis-pulse 2.5s ease-in-out infinite;
+            transition: all 0.4s ease;
+        }
+
+        .analysis-icon:hover {
+            transform: scale(1.1);
+            animation-duration: 1s;
+        }
+
+        @keyframes analysis-pulse {
+            0%, 100% { transform: scale(1); box-shadow: var(--shadow-orange); }
+            50% { transform: scale(1.05); box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4); }
+        }
+
+        .analysis-header-section h3 {
+            color: var(--navy-800);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-header-section:hover h3 {
+            color: var(--orange-600);
+        }
+
+        .analysis-subtitle {
+            color: var(--gray-600);
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-header-section:hover .analysis-subtitle {
+            color: var(--gray-700);
+        }
+
+        .analysis-content {
+            padding: 2rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .analysis-content h4 {
+            color: var(--orange-500);
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-content h4:hover {
+            color: var(--orange-600);
+            transform: translateX(5px);
+        }
+
+        .analysis-content h4::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-orange);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-content h4:hover::before {
+            width: 6px;
+            background: linear-gradient(135deg, var(--orange-400) 0%, var(--orange-600) 100%);
+        }
+
+        .analysis-content p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-700);
+            transition: all 0.3s ease;
+        }
+
+        .analysis-content p:hover {
+            color: var(--gray-800);
+        }
+
+        .analysis-content strong {
+            color: var(--orange-600);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .analysis-content strong:hover {
+            color: var(--orange-700);
+        }
+
+        /* Enhanced Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-buttons .btn {
+            min-width: 160px;
+            position: relative;
+        }
+
+        /* Enhanced Timestamp */
+        .timestamp {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 0 0 24px 24px;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            text-align: center;
+            border-top: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .timestamp:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        /* Enhanced Badge */
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.05);
+        }
+
+        .bg-primary {
+            background: var(--gradient-orange) !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            #cameraPlaceholder {
+                height: 250px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Enhanced Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Magnetic button effect */
+        .btn-magnetic {
+            transition: all 0.2s ease;
+        }
+
+        /* Loading state for buttons */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 50%;
+            left: 50%;
+            color: var(--white);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+              <div class="brand-logo">
+    <img src="static/images/logo.png" alt="PetPsych AI Logo" style="width: 24px; height: 24px; object-fit: contain;">
+</div>
+                <span class="brand-text">PetPsych AI</span>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a href="/" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Analysis Header -->
+    <section class="analysis-header">
+        <div class="container">
+            <div class="analysis-header-content">
+               <div class="header-icon">
+    <img src="static/images/hero-logo.png" alt="PetPsych AI Logo" style="width: 40px; height: 40px; object-fit: contain;">
+</div>
+                <h1 class="header-title">Pet Behavior Analysis</h1>
+                <p class="header-subtitle">
+                    Advanced AI-powered analysis to understand your pet's psychological patterns, emotions, and behavioral insights.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="main-card fade-in">
+                    <div class="card-body">
+                        <!-- Tabs -->
+                        <ul class="nav nav-tabs" id="mainTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form"
+                                        type="button" role="tab" aria-selected="true">
+                                    <i class="fas fa-edit me-2"></i>
+                                    <span>Behavioral Input</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="camera-tab" data-bs-toggle="tab" data-bs-target="#camera"
+                                        type="button" role="tab" aria-selected="false">
+                                    <i class="fas fa-video me-2"></i>
+                                    <span>Live Capture</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="tabContent">
+                            <!-- Form Tab -->
+                            <div class="tab-pane fade show active" id="form" role="tabpanel">
+                                <div class="form-container">
+                                    <div class="form-header">
+                                        <h4><i class="fas fa-clipboard-list me-2"></i>Pet Behavioral Analysis</h4>
+                                        <p class="text-muted">Provide detailed information about your pet's behavior for comprehensive AI analysis</p>
+                                    </div>
+
+                                    <form id="petForm">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <label for="pet_name" class="form-label">
+                                                    <i class="fas fa-heart" style="color: var(--orange-500);"></i>Pet's Name
+                                                </label>
+                                                <input type="text" class="form-control" id="pet_name" name="pet_name"
+                                                       placeholder="Enter your pet's name" required>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <label for="pet_breed" class="form-label">
+                                                    <i class="fas fa-dna" style="color: var(--orange-500);"></i>Pet's Breed
+                                                </label>
+                                                <input type="text" class="form-control" id="pet_breed" name="pet_breed"
+                                                       placeholder="e.g., Golden Retriever, Persian Cat" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <label for="pet_type" class="form-label">
+                                                    <i class="fas fa-paw" style="color: var(--orange-500);"></i>Pet Type
+                                                </label>
+                                                <select class="form-select" id="pet_type" name="pet_type" required>
+                                                    <option value="">Select pet type</option>
+                                                    <option value="dog">🐕 Dog</option>
+                                                    <option value="cat">🐱 Cat</option>
+                                                    <option value="bird">🐦 Bird</option>
+                                                    <option value="rabbit">🐰 Rabbit</option>
+                                                    <option value="hamster">🐹 Hamster</option>
+                                                    <option value="guinea pig">🐹 Guinea Pig</option>
+                                                    <option value="ferret">🦫 Ferret</option>
+                                                    <option value="other">🐾 Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="behavior_desc" class="form-label">
+                                                <i class="fas fa-eye" style="color: var(--orange-500);"></i>Behavior Description
+                                                <span class="badge bg-primary ms-2">Required</span>
+                                            </label>
+                                            <textarea class="form-control" id="behavior_desc" name="behavior_desc" rows="4"
+                                                    placeholder="Describe your pet's behavior in detail (e.g., pacing back and forth, tail wagging rapidly, unusual vocalizations, body posture changes)" required></textarea>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="vocal_cues" class="form-label">
+                                                <i class="fas fa-volume-up" style="color: var(--orange-500);"></i>Vocal Cues & Sounds
+                                            </label>
+                                            <textarea class="form-control" id="vocal_cues" name="vocal_cues" rows="3"
+                                                    placeholder="Describe any sounds: barking patterns, meowing types, chirping, whimpering, purring intensity, etc."></textarea>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="context" class="form-label">
+                                                <i class="fas fa-map-marker-alt" style="color: var(--orange-500);"></i>What user wants to know
+                                                <i class="fas fa-question-circle" style="color: var(--orange-500); cursor: help;"
+                                                   data-bs-toggle="tooltip"
+                                                   title="Include what you want to ask to AI"></i>
+                                            </label>
+                                            <textarea class="form-control" id="context" name="context" rows="3"
+                                                    placeholder="Your query for AI"></textarea>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="video_file" class="form-label">
+                                                <i class="fas fa-file-video" style="color: var(--orange-500);"></i>Upload Video (Optional)
+                                            </label>
+                                            <input class="form-control" type="file" id="video_file" name="video_file"
+                                                   accept="video/*">
+                                            <div class="form-text mt-2">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Video uploads provide more accurate behavioral analysis
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-lg btn-magnetic">
+                                               <i class="fas fa-paw"></i>
+                                                <span>Analyze Pet Psychology</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Camera Tab -->
+                            <div class="tab-pane fade" id="camera" role="tabpanel">
+                                <div class="text-center mb-4">
+                                    <div class="feature-icon mx-auto">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <h4>Real-time Behavioral Capture</h4>
+                                    <p class="text-muted">Use your camera to record live pet behavior for immediate AI analysis</p>
+                                </div>
+
+                                <div class="video-container">
+                                    <div id="cameraPlaceholder">
+                                        <div class="camera-icon">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                        <h5>Camera Ready</h5>
+                                        <p class="mb-0">Camera functionality will be available soon</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loader" id="loader">
+                    <div class="spinner"></div>
+                    <h5>AI Analysis in Progress</h5>
+                    <p class="text-muted mb-0">Decoding your pet's psychological patterns...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="analysis-result slide-up" id="analysisResult">
+                    <div class="analysis-header-section">
+                       <div class="analysis-icon">
+    <img src="static/images/logo.png" alt="PetPsych AI Logo" style="width: 32px; height: 32px; object-fit: contain;">
+</div>
+                        <h3>Pet Psychology Analysis Report</h3>
+                        <p class="analysis-subtitle">AI-powered behavioral insights and recommendations</p>
+                    </div>
+                    <div class="analysis-content">
+                        <div id="analysisContent"></div>
+                        <div class="action-buttons">
+                            <button id="newAnalysisBtn" class="btn btn-primary btn-magnetic">
+                                <i class="fas fa-plus me-2"></i>New Analysis
+                            </button>
+                            <button id="downloadBtn" class="btn btn-secondary btn-magnetic">
+                                <i class="fas fa-download me-2"></i>Download Report
+                            </button>
+
+                        </div>
+                    </div>
+                    <div class="timestamp" id="timestamp"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced PetPsych AI JavaScript with Advanced Hover Effects
+        console.log('🧠 PetPsych AI Analysis Page Loading...');
+
+        let analysisInProgress = false;
+        let currentAnalysis = '';
+
+        // Initialize when DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 Analysis page loading...');
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Setup form handlers
+            setupFormHandlers();
+
+            // Setup enhanced animations
+            setupEnhancedAnimations();
+
+            // Setup magnetic button effects
+            setupMagneticEffects();
+
+            console.log('✅ Enhanced PetPsych AI Analysis initialized');
+        }
+
+        function setupFormHandlers() {
+            const petForm = document.getElementById('petForm');
+
+            if (petForm) {
+                petForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    console.log('📝 Pet form submitted');
+                    submitForm(this);
+                });
+            }
+
+            // Button handlers
+            const newAnalysisBtn = document.getElementById('newAnalysisBtn');
+            if (newAnalysisBtn) {
+                newAnalysisBtn.addEventListener('click', resetForNewAnalysis);
+            }
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', downloadReport);
+            }
+        }
+
+        function setupEnhancedAnimations() {
+            // Enhanced hover effects for cards
+            const cards = document.querySelectorAll('.main-card, .form-container, .analysis-result');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Enhanced icon animations
+            const icons = document.querySelectorAll('.feature-icon, .camera-icon, .header-icon, .analysis-icon');
+            icons.forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.15) rotate(5deg)';
+                });
+
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+
+            // Form field focus animations
+            const formFields = document.querySelectorAll('.form-control, .form-select');
+            formFields.forEach(field => {
+                field.addEventListener('focus', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.01)';
+                });
+
+                field.addEventListener('blur', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+
+        function setupMagneticEffects() {
+            // Magnetic effect for buttons
+            const magneticButtons = document.querySelectorAll('.btn-magnetic');
+            magneticButtons.forEach(button => {
+                button.addEventListener('mousemove', function(e) {
+                    const rect = button.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+
+                    const moveX = x * 0.15;
+                    const moveY = y * 0.15;
+
+                    this.style.transform = `translate(${moveX}px, ${moveY}px) translateY(-4px) scale(1.02)`;
+                });
+
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // Enhanced logo hover effects
+            const logos = document.querySelectorAll('.brand-logo, .header-icon');
+            logos.forEach(logo => {
+                logo.addEventListener('mousemove', function(e) {
+                    const rect = logo.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+
+                    const rotateX = y * 0.3;
+                    const rotateY = x * -0.3;
+
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+                });
+
+                logo.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+
+        async function submitForm(form) {
+            if (analysisInProgress) {
+                showNotification('Analysis already in progress...', 'warning');
+                return;
+            }
+
+            // Validate form
+            if (!validateForm(form)) {
+                return;
+            }
+
+            analysisInProgress = true;
+
+            try {
+                // Show loading with beautiful animation
+                showLoader();
+                hideTabContent();
+
+                // Add loading state to submit button
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                }
+
+                // Prepare and send request
+                const formData = new FormData(form);
+                console.log('📤 Sending analysis request...');
+
+                const response = await fetch('/analyze_behavior', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('📥 Response received:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('📊 Result received:', result.success);
+
+                // Display results with beautiful styling
+                displayResults(result);
+
+            } catch (error) {
+                console.error('💥 Analysis failed:', error);
+                showNotification('Analysis failed: ' + error.message, 'error');
+                showTabContent();
+            } finally {
+                hideLoader();
+                analysisInProgress = false;
+
+                // Remove loading state from submit button
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+
+        function validateForm(form) {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    field.style.borderColor = '#ef4444';
+                    field.style.animation = 'shake 0.5s ease-in-out';
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    field.style.borderColor = '';
+                    field.style.animation = '';
+                }
+            });
+
+            if (!isValid) {
+                showNotification('Please fill in all required fields', 'error');
+
+                // Add shake animation for invalid fields
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        25% { transform: translateX(-5px); }
+                        75% { transform: translateX(5px); }
+                    }
+                `;
+                document.head.appendChild(style);
+
+                setTimeout(() => {
+                    style.remove();
+                }, 1000);
+            }
+
+            return isValid;
+        }
+
+        function showLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.display = 'block';
+                loader.style.opacity = '0';
+                loader.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    loader.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    loader.style.opacity = '1';
+                    loader.style.transform = 'translateY(0)';
+                }, 100);
+                console.log('⏳ Enhanced loader shown');
+            }
+        }
+
+        function hideLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+                console.log('✅ Enhanced loader hidden');
+            }
+        }
+
+        function hideTabContent() {
+            const tabContent = document.getElementById('tabContent');
+            if (tabContent) {
+                tabContent.style.transition = 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                tabContent.style.opacity = '0.3';
+                tabContent.style.transform = 'scale(0.95)';
+                tabContent.style.pointerEvents = 'none';
+                console.log('📝 Form hidden with enhanced animation');
+            }
+        }
+
+        function showTabContent() {
+            const tabContent = document.getElementById('tabContent');
+            if (tabContent) {
+                tabContent.style.opacity = '1';
+                tabContent.style.transform = 'scale(1)';
+                tabContent.style.pointerEvents = 'auto';
+                console.log('📝 Form shown');
+            }
+        }
+
+        function displayResults(result) {
+            console.log('🎨 Displaying enhanced results...');
+
+            if (result.success) {
+                currentAnalysis = result.analysis;
+
+                // Format analysis with beautiful styling
+                const formattedAnalysis = formatAnalysis(result.analysis);
+
+                // Update analysis content
+                const analysisContent = document.getElementById('analysisContent');
+                const timestamp = document.getElementById('timestamp');
+                const analysisResult = document.getElementById('analysisResult');
+
+                if (analysisContent) {
+                    analysisContent.innerHTML = formattedAnalysis;
+                }
+
+                if (timestamp) {
+                    timestamp.textContent = `Analysis completed: ${result.timestamp}`;
+                }
+
+                // Show results with enhanced animation
+                if (analysisResult) {
+                    analysisResult.style.display = 'block';
+                    analysisResult.style.opacity = '0';
+                    analysisResult.style.transform = 'translateY(40px) scale(0.95)';
+
+                    setTimeout(() => {
+                        analysisResult.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                        analysisResult.style.opacity = '1';
+                        analysisResult.style.transform = 'translateY(0) scale(1)';
+                    }, 200);
+                }
+
+                // Smooth scroll to results with enhanced easing
+                setTimeout(() => {
+                    analysisResult.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 800);
+
+                // Animate content items with staggered effect
+                setTimeout(() => {
+                    animateAnalysisContent();
+                }, 1000);
+
+                showNotification('🧠 Analysis completed successfully!', 'success');
+                console.log('✅ Enhanced results displayed');
+
+            } else {
+                console.error('❌ Analysis failed:', result.error);
+                showNotification('Analysis failed: ' + result.error, 'error');
+                showTabContent();
+            }
+        }
+
+        function formatAnalysis(text) {
+            if (!text) return '<p>No analysis content received.</p>';
+
+            return text
+                // Enhanced headers with orange styling and icons
+                .replace(/(\d+\.\s*)(.*?)(?=\n|$)/g, '<h4 style="color: var(--orange-500); margin: 2rem 0 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;"><i class="fas fa-brain" style="color: var(--orange-600);"></i>$1$2</h4>')
+                // Bold text with enhanced orange gradient
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--orange-600); font-weight: 600; background: linear-gradient(135deg, var(--orange-500), var(--orange-700)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">$1</strong>')
+                // Italic text with subtle color and transition
+                .replace(/\*(.*?)\*/g, '<em style="color: var(--gray-600); font-style: italic; transition: all 0.3s ease;">$1</em>')
+                // Line breaks and enhanced paragraphs
+                .replace(/\n\n/g, '</p><p style="margin-bottom: 1.5rem; line-height: 1.8; transition: all 0.3s ease;">')
+                .replace(/\n/g, '<br>')
+                .replace(/^(.*)$/, '<p style="margin-bottom: 1.5rem; line-height: 1.8; transition: all 0.3s ease;">$1</p>')
+                // Beautiful callouts with enhanced orange theme and animations
+                .replace(/(Key insight:|Important:|Note:|Warning:)/gi, '<span style="background: var(--gradient-orange); color: white; padding: 0.4rem 1rem; border-radius: 25px; font-size: 0.875rem; font-weight: 600; margin-right: 0.5rem; box-shadow: var(--shadow-orange); transition: all 0.3s ease; display: inline-block; transform: translateY(-1px);">$1</span>')
+                // Enhanced emoji reactions
+                .replace(/(happy|joy|playful|content)/gi, '<span style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--orange-600); font-weight: 500;">😊 $1</span>')
+                .replace(/(anxious|stressed|worried|fearful)/gi, '<span style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--orange-700); font-weight: 500;">😰 $1</span>')
+                .replace(/(aggressive|angry|frustrated)/gi, '<span style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--orange-800); font-weight: 500;">😠 $1</span>');
+        }
+
+        function animateAnalysisContent() {
+            const sections = document.querySelectorAll('#analysisContent h4, #analysisContent p');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(25px)';
+
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+
+            // Add hover effects to analysis sections
+            setTimeout(() => {
+                const analysisElements = document.querySelectorAll('#analysisContent h4, #analysisContent p, #analysisContent strong');
+                analysisElements.forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        if (this.tagName === 'H4') {
+                            this.style.transform = 'translateX(8px)';
+                            this.style.color = 'var(--orange-600)';
+                        } else if (this.tagName === 'P') {
+                            this.style.transform = 'translateX(4px)';
+                            this.style.color = 'var(--gray-800)';
+                        }
+                    });
+
+                    element.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateX(0)';
+                        if (this.tagName === 'H4') {
+                            this.style.color = 'var(--orange-500)';
+                        } else if (this.tagName === 'P') {
+                            this.style.color = 'var(--gray-700)';
+                        }
+                    });
+                });
+            }, 2000);
+        }
+
+        function resetForNewAnalysis() {
+            console.log('🔄 Reset for new analysis with enhanced animations...');
+
+            // Show form with enhanced animation
+            showTabContent();
+
+            // Hide results with enhanced animation
+            const analysisResult = document.getElementById('analysisResult');
+            if (analysisResult) {
+                analysisResult.style.opacity = '0';
+                analysisResult.style.transform = 'translateY(-30px) scale(0.95)';
+
+                setTimeout(() => {
+                    analysisResult.style.display = 'none';
+                }, 400);
+            }
+
+            // Reset forms with staggered animations
+            const form = document.getElementById('petForm');
+            if (form) {
+                const inputs = form.querySelectorAll('.form-control, .form-select');
+                inputs.forEach((input, index) => {
+                    setTimeout(() => {
+                        input.value = '';
+                        input.classList.remove('is-valid', 'is-invalid');
+                        input.style.borderColor = '';
+
+                        // Enhanced clear animation
+                        input.style.transform = 'scale(0.95)';
+                        input.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                        setTimeout(() => {
+                            input.style.transform = 'scale(1)';
+                        }, 100);
+                    }, index * 80);
+                });
+            }
+
+            // Enhanced scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            showNotification('Ready for new analysis 🚀', 'info');
+            currentAnalysis = '';
+        }
+
+        function downloadReport() {
+            console.log('📥 Downloading enhanced report...');
+
+            if (!currentAnalysis) {
+                showNotification('No analysis to download', 'error');
+                return;
+            }
+
+            try {
+                const petName = document.getElementById('pet_name')?.value || 'pet';
+                const petBreed = document.getElementById('pet_breed')?.value || 'Unknown';
+                const petType = document.getElementById('pet_type')?.value || 'Unknown';
+
+                const fileName = `${petName}_psychology_report_${new Date().toISOString().slice(0,10)}.txt`;
+
+                const content = `
+🧠 PETPSYCH AI - ENHANCED BEHAVIORAL ANALYSIS REPORT
+${'='.repeat(65)}
+
+📋 PET INFORMATION
+Name: ${petName}
+Type: ${petType}
+Breed: ${petBreed}
+Analysis Date: ${new Date().toLocaleString()}
+
+📊 DETAILED ANALYSIS RESULTS
+${currentAnalysis}
+
+🎯 ANALYSIS METHODOLOGY
+This report was generated using advanced AI algorithms specifically trained on
+veterinary behavioral data and pet psychology patterns.
+
+📋 IMPORTANT DISCLAIMER
+This analysis is generated by AI and should not replace professional veterinary
+advice. For health concerns, please consult with a qualified veterinarian.
+
+${'='.repeat(65)}
+Generated by PetPsych AI - Enhanced Edition
+Powered by Gemini 1.5 Pro • © 2025 PetPsych AI
+Advanced Orange & Navy Theme
+                `.trim();
+
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                showNotification('📥 Enhanced report downloaded successfully!', 'success');
+
+                // Add download animation to button
+                const downloadBtn = document.getElementById('downloadBtn');
+                if (downloadBtn) {
+                    downloadBtn.style.animation = 'bounce 0.6s ease';
+                    setTimeout(() => {
+                        downloadBtn.style.animation = '';
+                    }, 600);
+                }
+
+            } catch (error) {
+                console.error('Download error:', error);
+                showNotification('Download failed. Please try again.', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'info', duration = 5000) {
+            console.log(`📢 ${type.toUpperCase()}: ${message}`);
+
+            // Remove existing notifications
+            const existing = document.querySelectorAll('.enhanced-notification');
+            existing.forEach(n => n.remove());
+
+            const notification = document.createElement('div');
+            notification.className = 'enhanced-notification';
+
+            const colors = {
+                success: 'linear-gradient(135deg, #10b981, #059669)',
+                error: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                warning: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                info: 'linear-gradient(135deg, #ff6b35, #e55a2b)'
+            };
+
+            const icons = {
+                success: 'check-circle',
+                error: 'exclamation-circle',
+                warning: 'exclamation-triangle',
+                info: 'info-circle'
+            };
+
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                padding: 1.2rem 1.8rem;
+                border-radius: 20px;
+                color: white;
+                font-weight: 500;
+                max-width: 380px;
+                background: ${colors[type]};
+                box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+                backdrop-filter: blur(15px);
+                transform: translateX(120px) scale(0.8);
+                opacity: 0;
+                transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                border: 1px solid rgba(255,255,255,0.2);
+                cursor: pointer;
+            `;
+
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-${icons[type]}" style="font-size: 1.3rem; animation: notification-icon 2s ease-in-out infinite;"></i>
+                    <span>${message}</span>
+                    <i class="fas fa-times" style="margin-left: auto; opacity: 0.7; cursor: pointer; transition: all 0.3s ease;" onclick="this.parentElement.parentElement.remove()"></i>
+                </div>
+            `;
+
+            // Add notification icon animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes notification-icon {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(notification);
+
+            // Enhanced animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0) scale(1)';
+                notification.style.opacity = '1';
+            }, 100);
+
+            // Auto-hide with enhanced animation
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120px) scale(0.8)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                        style.remove();
+                    }
+                }, 500);
+            }, duration);
+
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.transform = 'translateX(120px) scale(0.8)';
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.remove();
+                    style.remove();
+                }, 300);
+            });
+        }
+
+        // Enhanced page load animation
+        window.addEventListener('load', function() {
+            const elements = document.querySelectorAll('.main-card, .form-container');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+
+                setTimeout(() => {
+                    element.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        console.log('🎉 Enhanced PetPsych AI Analysis Page fully loaded!');
+    </script>
+</body>
+</html>
